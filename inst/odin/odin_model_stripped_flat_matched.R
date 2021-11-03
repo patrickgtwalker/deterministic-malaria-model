@@ -204,7 +204,8 @@ dim(age) <- na
 age[] <- user() # vector of age categories supplied by user
 
 dim(fd) <- na
-fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
+fd[1:(na-1)] <- 1-(1-fD0)/(1+((age[i]+age[i+1])/2/aD)^gammaD)
+fd[na]<-1-(1-fD0)/(1+(age[i]/aD)^gammaD)
 dim(p_det) <- c(na,nh)
 p_det[,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j]/ID0)^kD)
 
@@ -414,7 +415,11 @@ dim(prev0to59) <- c(age59,nh)
 prev0to59[1:age59,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
 output(prev) <- sum(prev0to59[,])/sum(den[1:age59])
 
-# slide positivity in 0 -5 year age bracket
+
+dim(clin_inc0tounder5) <- c(age59,nh)
+clin_inc0tounder5[1:age59,] <- clin_inc[i,j]
+output(incunder5) <- sum(clin_inc0tounder5)/sum(den[1:age59])
+
 dim(clin_inc0to5) <- c(age05,nh)
 clin_inc0to5[1:age05,] <- clin_inc[i,j]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
